@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Wizard;
+namespace App\Form\Builder;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

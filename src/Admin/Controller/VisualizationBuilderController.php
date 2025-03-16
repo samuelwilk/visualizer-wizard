@@ -3,11 +3,11 @@ namespace App\Admin\Controller;
 
 use App\Entity\DataSource;
 use App\Entity\VisualizationConfiguration;
-use App\Form\Wizard\DataSourceSelectionFormType;
-use App\Form\Wizard\ColumnSelectionFormType;
-use App\Form\Wizard\ChartConfigurationFormType;
-use App\Form\Wizard\ReviewAndSaveFormType;
-use App\Form\Wizard\VisualizationConfigurationFormType;
+use App\Form\Builder\DataSourceSelectionFormType;
+use App\Form\Builder\ColumnSelectionFormType;
+use App\Form\Builder\ChartConfigurationFormType;
+use App\Form\Builder\ReviewAndSaveFormType;
+use App\Form\Builder\VisualizationConfigurationFormType;
 use App\Service\DataFetcherService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -16,8 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin/wizard', name: 'admin_wizard')]
-class VisualizationWizardController extends AbstractDashboardController
+#[Route('/admin/builder', name: 'admin_builder')]
+class VisualizationBuilderController extends AbstractDashboardController
 {
     public function __construct(private readonly DataFetcherService $dataFetcher, private readonly EntityManagerInterface $entityManager)
     {

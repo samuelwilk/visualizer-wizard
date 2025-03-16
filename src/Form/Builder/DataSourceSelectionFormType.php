@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Wizard;
+namespace App\Form\Builder;
 
 use App\Entity\DataSource;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

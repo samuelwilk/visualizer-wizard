@@ -1,37 +1,42 @@
 <?php
 
-namespace App\Form\Wizard;
+namespace App\Form\Builder;
 
+use App\Enum\ChartTypeEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ColumnSelectionFormType extends AbstractType
+class ChartConfigurationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $columns = $options['columns']; // Pass columns dynamically from API response
+        $columns = $options['columns'];
 
         $builder
-            ->add('selectedColumns', ChoiceType::class, [
+            ->add('chartType', ChoiceType::class, [
+                'choices' => ChartTypeEnum::cases(),
+                'label' => 'Chart Type',
+                'required' => true,
+            ])
+            ->add('title', TextType::class, ['label' => 'Chart Title', 'required' => true])
+            ->add('labels', ChoiceType::class, [
                 'choices' => array_combine($columns, $columns),
                 'multiple' => true,
                 'expanded' => true,
-                'label' => 'Select Columns to Include',
+                'label' => 'Labels (X-Axis)',
                 'required' => true,
             ])
-            ->add('filters', CollectionType::class, [
-                'entry_type' => ChoiceType::class,
-                'entry_options' => [
-                    'choices' => array_combine($columns, $columns),
-                    'placeholder' => 'Select a column to filter by',
-                ],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'label' => 'Row Filters',
+            ->add('series', ChoiceType::class, [
+                'choices' => array_combine($columns, $columns),
+                'multiple' => true,
+                'expanded' => true,
+                'label' => 'Series (Y-Axis)',
+                'required' => true,
             ])
             ->add('prev', SubmitType::class, ['label' => '← Back'])
             ->add('next', SubmitType::class, ['label' => 'Next →']);
@@ -40,7 +45,7 @@ class ColumnSelectionFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'columns' => [], // Default empty, must be passed dynamically
+            'columns' => [],
         ]);
     }
 }

@@ -65,10 +65,24 @@ class DataSource
     #[ORM\Column(enumType: ApiResponseContentTypeEnum::class)]
     private ?ApiResponseContentTypeEnum $apiResponseContentType = null;
 
+    /**
+     * @var Collection<int, BuilderDataSource>
+     */
+    #[ORM\OneToMany(targetEntity: BuilderDataSource::class, mappedBy: 'dataSource')]
+    private Collection $builderDataSources;
+
+    /**
+     * @var Collection<int, VisualizationBuilderProgress>
+     */
+    #[ORM\OneToMany(targetEntity: VisualizationBuilderProgress::class, mappedBy: 'dataSource')]
+    private Collection $visualizationBuilderProgress;
+
     public function __construct()
     {
         $this->preProcessedData = new ArrayCollection();
         $this->visualizationConfigurations = new ArrayCollection();
+        $this->builderDataSources = new ArrayCollection();
+        $this->visualizationBuilderProgress = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -259,5 +273,65 @@ class DataSource
     public function __toString(): string
     {
         return $this->name ?? 'Unnamed Data Source';
+    }
+
+    /**
+     * @return Collection<int, BuilderDataSource>
+     */
+    public function getBuilderDataSources(): Collection
+    {
+        return $this->builderDataSources;
+    }
+
+    public function addBuilderDataSource(BuilderDataSource $builderDataSource): static
+    {
+        if (!$this->builderDataSources->contains($builderDataSource)) {
+            $this->builderDataSources->add($builderDataSource);
+            $builderDataSource->setDataSource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBuilderDataSource(BuilderDataSource $builderDataSource): static
+    {
+        if ($this->builderDataSources->removeElement($builderDataSource)) {
+            // set the owning side to null (unless already changed)
+            if ($builderDataSource->getDataSource() === $this) {
+                $builderDataSource->setDataSource(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VisualizationBuilderProgress>
+     */
+    public function getVisualizationBuilderProgress(): Collection
+    {
+        return $this->visualizationBuilderProgress;
+    }
+
+    public function addVisualizationBuilderProgress(VisualizationBuilderProgress $visualizationBuilderProgress): static
+    {
+        if (!$this->visualizationBuilderProgress->contains($visualizationBuilderProgress)) {
+            $this->visualizationBuilderProgress->add($visualizationBuilderProgress);
+            $visualizationBuilderProgress->setDataSource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVisualizationBuilderProgress(VisualizationBuilderProgress $visualizationBuilderProgress): static
+    {
+        if ($this->visualizationBuilderProgress->removeElement($visualizationBuilderProgress)) {
+            // set the owning side to null (unless already changed)
+            if ($visualizationBuilderProgress->getDataSource() === $this) {
+                $visualizationBuilderProgress->setDataSource(null);
+            }
+        }
+
+        return $this;
     }
 }

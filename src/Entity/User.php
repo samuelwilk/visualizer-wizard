@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -39,6 +41,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[Assert\NotNull]
     private ?string $plainPassword = null;
+
+    /**
+     * @var Collection<int, VisualizationBuilderProgress>
+     */
+    #[ORM\OneToMany(targetEntity: VisualizationBuilderProgress::class, mappedBy: 'lastModifiedBy')]
+    private Collection $visualizationBuilderProgress;
+
+    public function __construct()
+    {
+        $this->visualizationBuilderProgress = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -125,5 +138,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, VisualizationBuilderProgress>
+     */
+    public function getVisualizationBuilderProgress(): Collection
+    {
+        return $this->visualizationBuilderProgress;
+    }
+
+    public function addVisualizationBuilderProgress(VisualizationBuilderProgress $visualizationBuilderProgress): static
+    {
+        if (!$this->visualizationBuilderProgress->contains($visualizationBuilderProgress)) {
+            $this->visualizationBuilderProgress->add($visualizationBuilderProgress);
+            $visualizationBuilderProgress->setLastModifiedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVisualizationBuilderProgress(VisualizationBuilderProgress $visualizationBuilderProgress): static
+    {
+        if ($this->visualizationBuilderProgress->removeElement($visualizationBuilderProgress)) {
+            // set the owning side to null (unless already changed)
+            if ($visualizationBuilderProgress->getLastModifiedBy() === $this) {
+                $visualizationBuilderProgress->setLastModifiedBy(null);
+            }
+        }
+
+        return $this;
     }
 }

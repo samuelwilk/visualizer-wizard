@@ -38,6 +38,9 @@ class VisualizationConfiguration
     #[ORM\OneToMany(targetEntity: ChartConfiguration::class, mappedBy: 'visualizationConfiguration')]
     private Collection $chartConfigurations;
 
+    #[ORM\OneToOne(mappedBy: 'visualizationConfiguration', cascade: ['persist', 'remove'])]
+    private ?VisualizationBuilderProgress $visualizationBuilderProgress = null;
+
     public function __construct()
     {
         $this->chartConfigurations = new ArrayCollection();
@@ -122,6 +125,28 @@ class VisualizationConfiguration
                 $chartConfiguration->setVisualizationConfiguration(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVisualizationBuilderProgress(): ?VisualizationBuilderProgress
+    {
+        return $this->visualizationBuilderProgress;
+    }
+
+    public function setVisualizationBuilderProgress(?VisualizationBuilderProgress $visualizationBuilderProgress): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($visualizationBuilderProgress === null && $this->visualizationBuilderProgress !== null) {
+            $this->visualizationBuilderProgress->setVisualizationConfiguration(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($visualizationBuilderProgress !== null && $visualizationBuilderProgress->getVisualizationConfiguration() !== $this) {
+            $visualizationBuilderProgress->setVisualizationConfiguration($this);
+        }
+
+        $this->visualizationBuilderProgress = $visualizationBuilderProgress;
 
         return $this;
     }
