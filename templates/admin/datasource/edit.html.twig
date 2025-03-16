@@ -1,0 +1,15 @@
+{% extends '@EasyAdmin/crud/edit.html.twig' %}
+
+{% block content %}
+    {{ parent() }}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    {% if testData is defined and testData is not null %}
+        <h3>Data Preview:</h3>
+        <pre>{{ testData|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+    {% endif %}
+{% endblock %}

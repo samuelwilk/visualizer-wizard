@@ -1,0 +1,29 @@
+{% extends '@EasyAdmin/crud/new.html.twig' %}
+
+{% block content_title %}
+    {{ pageTitle|default('Wizard: Create a New Visualization Configuration') }}
+{% endblock %}
+
+{% block form_content %}
+    {# Example multi‑step wizard logic using query parameters #}
+    {% if app.request.query.get('wizardStep') == '2' %}
+        <div id="wizard-step-2">
+            <h2>Step 2: Provide an Example</h2>
+            {# Here, include the fields for the API or file example (you might render partials) #}
+        </div>
+    {% elseif app.request.query.get('wizardStep') == '3' %}
+        <div id="wizard-step-3">
+            <h2>Step 3: Select Columns and Rows</h2>
+            {# Include UI for column/row selection based on the example provided #}
+        </div>
+    {% else %}
+        <div id="wizard-step-1">
+            <h2>Step 1: Select Data Source Type</h2>
+            {# Include UI for selecting data source type.
+               You can embed the DataSourceType selection form here. #}
+        </div>
+    {% endif %}
+
+    {# Render the default form widget (which includes all fields defined in configureFields) #}
+    {{ parent() }}
+{% endblock %}

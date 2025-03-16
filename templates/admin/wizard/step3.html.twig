@@ -1,0 +1,28 @@
+{% extends 'admin/wizard/base_wizard.html.twig' %}
+
+{% block main %}
+    <h3>Step 3: Configure Charts</h3>
+    <p>Select a chart type, define labels, and set the series data.</p>
+
+    {{ parent() }}
+
+    {# Live Preview of the Chart #}
+    <div id="chart-preview-container" class="mt-4"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('#chart_configuration_form_chartType');
+            form.addEventListener('change', function() {
+                updateChartPreview();
+            });
+
+            function updateChartPreview() {
+                let chartType = document.querySelector('[name="chart_configuration_form[chartType]"]').value;
+                let labels = Array.from(document.querySelectorAll('[name="chart_configuration_form[labels][]"]:checked')).map(el => el.value);
+                let series = Array.from(document.querySelectorAll('[name="chart_configuration_form[series][]"]:checked')).map(el => el.value);
+
+                document.getElementById('chart-preview-container').innerHTML = `<strong>Preview:</strong> ${chartType} Chart with Labels (${labels.join(', ')}) and Series (${series.join(', ')})`;
+            }
+        });
+    </script>
+{% endblock %}
