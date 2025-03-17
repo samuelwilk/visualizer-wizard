@@ -39,6 +39,10 @@ class VisualizationConfigurationCrudController extends AbstractCrudController
                 ->setHelp('Select the data source for this visualization.')
                 ->setCrudController(DataSourceCrudController::class),
 
+            AssociationField::new('preProcessedData')
+                ->setHelp('Select the Pre-Processed data for this visualization.')
+                ->setCrudController(DataSourceCrudController::class),
+
             ArrayField::new('configuration')
                 ->setHelp('Define the chart/table configuration settings in JSON format.')
                 ->hideOnIndex(),

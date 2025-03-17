@@ -12,6 +12,10 @@ class ReviewAndSaveFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('prev', SubmitType::class, [
+                'label' => '← Back',
+                'attr' => ['class' => 'btn btn-primary'],
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Save & Finish',
                 'attr' => ['class' => 'btn btn-success']

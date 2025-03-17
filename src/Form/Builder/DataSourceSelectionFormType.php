@@ -20,7 +20,10 @@ class DataSourceSelectionFormType extends AbstractType
                 'placeholder' => 'Select a Data Source',
                 'required' => true,
             ])
-            ->add('next', SubmitType::class, ['label' => 'Next →']);
+            ->add('next', SubmitType::class, [
+                'label' => 'Next →',
+                'attr' => ['class' => 'btn btn-primary'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

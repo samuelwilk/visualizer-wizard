@@ -1,0 +1,20 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block main %}
+    <div class="card">
+        <div class="card-body">
+            <h3>{{ title }}</h3>
+            <p>{{ description }}</p>
+
+            <div class="progress mb-3">
+                <div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">
+                    Step {{ step }} of 6
+                </div>
+            </div>
+
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

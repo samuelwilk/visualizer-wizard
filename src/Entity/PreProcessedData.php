@@ -30,6 +30,9 @@ class PreProcessedData
     #[ORM\Column]
     private ?bool $isActive = null;
 
+    #[ORM\ManyToOne(inversedBy: 'preProcessedData')]
+    private ?VisualizationConfiguration $visualizationConfiguration = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -81,5 +84,22 @@ class PreProcessedData
         $this->isActive = $isActive;
 
         return $this;
+    }
+
+    public function getVisualizationConfiguration(): ?VisualizationConfiguration
+    {
+        return $this->visualizationConfiguration;
+    }
+
+    public function setVisualizationConfiguration(?VisualizationConfiguration $visualizationConfiguration): static
+    {
+        $this->visualizationConfiguration = $visualizationConfiguration;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

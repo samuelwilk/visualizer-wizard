@@ -1,0 +1,20 @@
+{% extends 'admin/builder/base_builder.html.twig' %}
+
+{% set title = 'Step 2: Select Columns' %}
+{% set description = 'Select which columns to include in the visualization.' %}
+{% set step = 2 %}
+{% set progress = 32 %}
+
+{% block main %}
+    {% if available_columns is not empty %}
+        <div class="alert alert-info">
+            <strong>Available Columns:</strong> {{ available_columns|join(', ') }}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            <strong>No available columns found.</strong> Please check the selected data source.
+        </div>
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}

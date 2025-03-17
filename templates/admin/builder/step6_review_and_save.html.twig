@@ -1,0 +1,18 @@
+{% extends 'admin/builder/base_builder.html.twig' %}
+
+{% set title = 'Step 6: Review & Save' %}
+{% set description = 'Check your configuration and save the visualization.' %}
+{% set step = 6 %}
+{% set progress = 100 %}
+
+{% block main %}
+    <h4>Summary</h4>
+    <ul>
+        <li><strong>Data Source:</strong> {{ builder_progress.getBuilderDataSource().getBaseDataSource().getName() }}</li>
+        <li><strong>Selected Columns:</strong> {{ builder_progress.getBuilderDataSource().getSelectedColumns()|join(', ') }}</li>
+        <li><strong>Charts:</strong> {{ builder_progress.getChartConfigurations()|length }}</li>
+        <li><strong>Tables:</strong> {{ builder_progress.getTableConfigurations()|length }}</li>
+    </ul>
+
+    {{ parent() }}
+{% endblock %}

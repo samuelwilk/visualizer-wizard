@@ -2,56 +2,39 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\Timestampable;
-use App\Enum\ChartTypeEnum;
-use App\Repository\ChartConfigurationRepository;
+use App\Repository\TableConfigurationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ChartConfigurationRepository::class)]
-#[ORM\HasLifecycleCallbacks]
-class ChartConfiguration
+#[ORM\Entity(repositoryClass: TableConfigurationRepository::class)]
+class TableConfiguration
 {
-    use Timestampable;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(enumType: ChartTypeEnum::class)]
-    private ?ChartTypeEnum $chartType = null;
-
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
     #[ORM\Column(nullable: true)]
-    private ?array $labels = null;
+    private ?array $selectedColumns = null;
 
     #[ORM\Column(nullable: true)]
-    private ?array $series = null;
+    private ?array $sorting = null;
 
-    #[ORM\ManyToOne(inversedBy: 'chartConfigurations')]
+    #[ORM\Column(nullable: true)]
+    private ?array $filters = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tableConfigurations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?VisualizationConfiguration $visualizationConfiguration = null;
 
-    #[ORM\ManyToOne(inversedBy: 'chartConfigurations')]
+    #[ORM\ManyToOne(inversedBy: 'tableConfigurations')]
     private ?VisualizationBuilderProgress $visualizationBuilderProgress = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getChartType(): ?ChartTypeEnum
-    {
-        return $this->chartType;
-    }
-
-    public function setChartType(ChartTypeEnum $chartType): static
-    {
-        $this->chartType = $chartType;
-
-        return $this;
     }
 
     public function getTitle(): ?string
@@ -66,26 +49,38 @@ class ChartConfiguration
         return $this;
     }
 
-    public function getLabels(): ?array
+    public function getSelectedColumns(): ?array
     {
-        return $this->labels;
+        return $this->selectedColumns;
     }
 
-    public function setLabels(?array $labels): static
+    public function setSelectedColumns(?array $selectedColumns): static
     {
-        $this->labels = $labels;
+        $this->selectedColumns = $selectedColumns;
 
         return $this;
     }
 
-    public function getSeries(): ?array
+    public function getSorting(): ?array
     {
-        return $this->series;
+        return $this->sorting;
     }
 
-    public function setSeries(?array $series): static
+    public function setSorting(?array $sorting): static
     {
-        $this->series = $series;
+        $this->sorting = $sorting;
+
+        return $this;
+    }
+
+    public function getFilters(): ?array
+    {
+        return $this->filters;
+    }
+
+    public function setFilters(?array $filters): static
+    {
+        $this->filters = $filters;
 
         return $this;
     }
@@ -116,6 +111,6 @@ class ChartConfiguration
 
     public function __toString(): string
     {
-        return $this->getTitle() ?? '';
+        return $this->getTitle() .  "($this->id)";
     }
 }

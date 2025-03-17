@@ -27,8 +27,14 @@ class VisualizationConfigurationFormType extends AbstractType
                 'allow_delete' => true,
                 'label' => 'Section Names',
             ])
-            ->add('prev', SubmitType::class, ['label' => '← Back'])
-            ->add('next', SubmitType::class, ['label' => 'Next →']);
+            ->add('prev', SubmitType::class, [
+                'label' => '← Back',
+                'attr' => ['class' => 'btn btn-primary'],
+            ])
+            ->add('next', SubmitType::class, [
+                'label' => 'Next →',
+                'attr' => ['class' => 'btn btn-primary'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

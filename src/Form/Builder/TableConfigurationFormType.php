@@ -2,40 +2,30 @@
 
 namespace App\Form\Builder;
 
-use App\Enum\ChartTypeEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ChartConfigurationFormType extends AbstractType
+class TableConfigurationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $columns = $options['columns'];
+        $columns = $options['columns'] ?? [];
 
         $builder
-            ->add('chartType', ChoiceType::class, [
-                'choices' => ChartTypeEnum::cases(),
-                'label' => 'Chart Type',
+            ->add('tableTitle', TextType::class, [
+                'label' => 'Table Title',
                 'required' => true,
+                'attr' => ['placeholder' => 'Enter table title...'],
             ])
-            ->add('title', TextType::class, ['label' => 'Chart Title', 'required' => true])
-            ->add('labels', ChoiceType::class, [
+            ->add('selectedColumns', ChoiceType::class, [
                 'choices' => array_combine($columns, $columns),
-                'multiple' => true,
-                'expanded' => true,
-                'label' => 'Labels (X-Axis)',
-                'required' => true,
-            ])
-            ->add('series', ChoiceType::class, [
-                'choices' => array_combine($columns, $columns),
-                'multiple' => true,
-                'expanded' => true,
-                'label' => 'Series (Y-Axis)',
+                'expanded' => true, // Display as checkboxes
+                'multiple' => true, // Allow multiple selections
+                'label' => 'Select Columns for the Table',
                 'required' => true,
             ])
             ->add('prev', SubmitType::class, [

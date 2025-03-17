@@ -26,6 +26,9 @@ class VisualizationConfiguration
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\OneToOne(mappedBy: 'visualizationConfiguration', cascade: ['persist', 'remove'])]
+    private ?VisualizationBuilderProgress $visualizationBuilderProgress = null;
+
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'visualizationConfigurations')]
     private ?DataSource $dataSource = null;
 
@@ -38,12 +41,23 @@ class VisualizationConfiguration
     #[ORM\OneToMany(targetEntity: ChartConfiguration::class, mappedBy: 'visualizationConfiguration')]
     private Collection $chartConfigurations;
 
-    #[ORM\OneToOne(mappedBy: 'visualizationConfiguration', cascade: ['persist', 'remove'])]
-    private ?VisualizationBuilderProgress $visualizationBuilderProgress = null;
+    /**
+     * @var Collection<int, TableConfiguration>
+     */
+    #[ORM\OneToMany(targetEntity: TableConfiguration::class, mappedBy: 'visualizationConfiguration')]
+    private Collection $tableConfigurations;
+
+    /**
+     * @var Collection<int, PreProcessedData>
+     */
+    #[ORM\OneToMany(targetEntity: PreProcessedData::class, mappedBy: 'visualizationConfiguration')]
+    private Collection $preProcessedData;
 
     public function __construct()
     {
         $this->chartConfigurations = new ArrayCollection();
+        $this->preProcessedData = new ArrayCollection();
+        $this->tableConfigurations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,5 +163,70 @@ class VisualizationConfiguration
         $this->visualizationBuilderProgress = $visualizationBuilderProgress;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, PreProcessedData>
+     */
+    public function getPreProcessedData(): Collection
+    {
+        return $this->preProcessedData;
+    }
+
+    public function addPreProcessedData(PreProcessedData $preProcessedData): static
+    {
+        if (!$this->preProcessedData->contains($preProcessedData)) {
+            $this->preProcessedData->add($preProcessedData);
+            $preProcessedData->setVisualizationConfiguration($this);
+        }
+
+        return $this;
+    }
+
+    public function removePreProcessedData(PreProcessedData $preProcessedData): static
+    {
+        if ($this->preProcessedData->removeElement($preProcessedData)) {
+            // set the owning side to null (unless already changed)
+            if ($preProcessedData->getVisualizationConfiguration() === $this) {
+                $preProcessedData->setVisualizationConfiguration(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TableConfiguration>
+     */
+    public function getTableConfigurations(): Collection
+    {
+        return $this->tableConfigurations;
+    }
+
+    public function addTableConfiguration(TableConfiguration $tableConfiguration): static
+    {
+        if (!$this->tableConfigurations->contains($tableConfiguration)) {
+            $this->tableConfigurations->add($tableConfiguration);
+            $tableConfiguration->setVisualizationConfiguration($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTableConfiguration(TableConfiguration $tableConfiguration): static
+    {
+        if ($this->tableConfigurations->removeElement($tableConfiguration)) {
+            // set the owning side to null (unless already changed)
+            if ($tableConfiguration->getVisualizationConfiguration() === $this) {
+                $tableConfiguration->setVisualizationConfiguration(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 }
